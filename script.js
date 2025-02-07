@@ -8,6 +8,7 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--temp');
 const inputElevation = document.querySelector('.form__input--climb');
 
+// document.addEventListener('DOMContentLoaded', function () {
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
     function (position) {
@@ -19,7 +20,7 @@ if (navigator.geolocation) {
 
       console.log(latitude, longitude);
       console.log(
-        `https://www.google.com/maps/@${latitude},${longitude},5675m`
+        `https://www.google.com/maps/@${latitude},${longitude},5675m/data=!3m1!1e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D`
       );
     },
     function () {
