@@ -46,8 +46,20 @@ if (navigator.geolocation) {
         const { lat, lng } = mapEvent.latlng;
         // console.log(latitudeWhereClick, longitudeWhereClick);
 
-        L.marker([lat, lng]).addTo(map).bindPopup('Я новий маркер').openPopup();
-        // L.marker([lat, lng]).addTo(map).bindPopup(L.popup({})).openPopup();
+        // L.marker([lat, lng]).addTo(map).bindPopup('Я новий маркер').openPopup();
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 200,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('тренування')
+          .openPopup();
       });
     },
     function () {
