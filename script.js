@@ -85,3 +85,8 @@ form.addEventListener('submit', function (e) {
     .setPopupContent('тренування')
     .openPopup();
 });
+
+inputType.addEventListener('change', function () {
+  inputClimb.closest('.form__row').classList.toggle('form__row--hidden');
+  inputTemp.closest('.form__row').classList.toggle('form__row--hidden');
+});
