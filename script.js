@@ -9,8 +9,11 @@ const containerWorkouts = document.querySelector('.workouts');
 const inputType = document.querySelector('.form__input--type');
 const inputDistance = document.querySelector('.form__input--distance');
 const inputDuration = document.querySelector('.form__input--duration');
-const inputCadence = document.querySelector('.form__input--temp');
-const inputElevation = document.querySelector('.form__input--climb');
+const inputTemp = document.querySelector('.form__input--temp');
+const inputClimb = document.querySelector('.form__input--climb');
+
+let map;
+let mapEvent;
 
 // document.addEventListener('DOMContentLoaded', function () {
 if (navigator.geolocation) {
@@ -27,7 +30,7 @@ if (navigator.geolocation) {
         `https://www.google.com/maps/@${latitude},${longitude},5675m/data=!3m1!1e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D`
       );
 
-      const map = L.map('map').setView([latitude, longitude], 13);
+      map = L.map('map').setView([latitude, longitude], 13);
       // console.log(map);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -40,26 +43,11 @@ if (navigator.geolocation) {
         .bindPopup('Тута я')
         .openPopup();
 
-      map.on('click', function (mapEvent) {
-        // const lat = mapEvent.latlng.lat;
-        // const lng = mapEvent.latlng.lng;
-        const { lat, lng } = mapEvent.latlng;
-        // console.log(latitudeWhereClick, longitudeWhereClick);
-
-        // L.marker([lat, lng]).addTo(map).bindPopup('Я новий маркер').openPopup();
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup(
-            L.popup({
-              maxWidth: 200,
-              minWidth: 100,
-              autoClose: false,
-              closeOnClick: false,
-              className: 'running-popup',
-            })
-          )
-          .setPopupContent('тренування')
-          .openPopup();
+      // Опрацювання кліку на карті
+      map.on('click', function (event) {
+        mapEvent = event;
+        form.classList.remove('hidden');
+        inputDistance.focus();
       });
     },
     function () {
@@ -67,3 +55,33 @@ if (navigator.geolocation) {
     }
   );
 }
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  // Очищення полей ввода данних
+  inputDistance.value = '';
+  inputDuration.value = '';
+  inputTemp.value = '';
+  inputClimb.value = '';
+
+  // відображення маркера
+  // const lat = mapEvent.latlng.lat;
+  // const lng = mapEvent.latlng.lng;
+
+  const { lat, lng } = mapEvent.latlng; // за допомогою деструктиризації.
+
+  L.marker([lat, lng])
+    .addTo(map)
+    .bindPopup(
+      L.popup({
+        maxWidth: 200,
+        minWidth: 100,
+        autoClose: false,
+        closeOnClick: false,
+        className: 'running-popup',
+      })
+    )
+    .setPopupContent('тренування')
+    .openPopup();
+});
