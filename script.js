@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L, { layerGroup } from 'leaflet';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -28,6 +28,7 @@ if (navigator.geolocation) {
       );
 
       const map = L.map('map').setView([latitude, longitude], 13);
+      // console.log(map);
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution:
@@ -36,8 +37,18 @@ if (navigator.geolocation) {
 
       L.marker([latitude, longitude])
         .addTo(map)
-        .bindPopup('A pretty CSS popup.<br> Easily customizable.')
+        .bindPopup('Тута я')
         .openPopup();
+
+      map.on('click', function (mapEvent) {
+        // const lat = mapEvent.latlng.lat;
+        // const lng = mapEvent.latlng.lng;
+        const { lat, lng } = mapEvent.latlng;
+        // console.log(latitudeWhereClick, longitudeWhereClick);
+
+        L.marker([lat, lng]).addTo(map).bindPopup('Я новий маркер').openPopup();
+        // L.marker([lat, lng]).addTo(map).bindPopup(L.popup({})).openPopup();
+      });
     },
     function () {
       alert('Неможливо отримати ваше місцезнаходження');
