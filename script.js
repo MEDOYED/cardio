@@ -15,46 +15,69 @@ const inputClimb = document.querySelector('.form__input--climb');
 let map;
 let mapEvent;
 
-// document.addEventListener('DOMContentLoaded', function () {
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    function (position) {
-      const { latitude } = position.coords;
-      // const latitude = position.coords.latitude;
+class App {
+  #map; // приватні властивості класу
+  #mapEvent;
 
-      const { longitude } = position.coords;
-      // const longitude = position.coords.longitude;
+  constructor() {
+    this._getPosition();
+  }
 
-      console.log(latitude, longitude);
-      console.log(
-        `https://www.google.com/maps/@${latitude},${longitude},5675m/data=!3m1!1e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D`
+  _getPosition() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        this._loadMap.bind(this),
+        function () {
+          alert('Неможливо отримати ваше місцезнаходження');
+        }
       );
-
-      map = L.map('map').setView([latitude, longitude], 13);
-      // console.log(map);
-
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
-
-      L.marker([latitude, longitude])
-        .addTo(map)
-        .bindPopup('Тута я')
-        .openPopup();
-
-      // Опрацювання кліку на карті
-      map.on('click', function (event) {
-        mapEvent = event;
-        form.classList.remove('hidden');
-        inputDistance.focus();
-      });
-    },
-    function () {
-      alert('Неможливо отримати ваше місцезнаходження');
     }
-  );
+  }
+
+  _loadMap(position) {
+    const { latitude } = position.coords;
+    // const latitude = position.coords.latitude;
+
+    const { longitude } = position.coords;
+    // const longitude = position.coords.longitude;
+
+    console.log(latitude, longitude);
+    console.log(
+      `https://www.google.com/maps/@${latitude},${longitude},5675m/data=!3m1!1e3?authuser=0&entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D`
+    );
+
+    this.#map = L.map('map').setView([latitude, longitude], 13);
+    // console.log(map);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(this.#map);
+
+    L.marker([latitude, longitude])
+      .addTo(this.#map)
+      .bindPopup('Тута я')
+      .openPopup();
+
+    // Опрацювання кліку на карті
+    this.#map.on('click', function (event) {
+      this.#mapEvent = event;
+      form.classList.remove('hidden');
+      inputDistance.focus();
+    });
+  }
+
+  _showForm() {}
+
+  _toggleClimbField() {}
+
+  _newWorkout() {}
 }
+
+const app = new App();
+app._getPosition();
+
+// document.addEventListener('DOMContentLoaded', function () {
 
 form.addEventListener('submit', function (e) {
   e.preventDefault();
